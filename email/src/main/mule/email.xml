@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="671c7226-6742-4694-9b6d-6cfc28a4b73b" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="98fcc1e9-ff81-4b22-9d08-17aca197d2e8" from="sunil732@gmail.com">
+		<email:smtps-connection host="smpt.gmail.com" user="sunil732@gmail.com" password="Ekanshrena1238#" timeoutUnit="HOURS" >
+			<tls:context >
+				<tls:trust-store insecure="true" />
+			</tls:context>
+			<email:properties />
+		</email:smtps-connection>
+		<expiration-policy timeUnit="HOURS" />
+	</email:smtp-config>
+	<flow name="emailFlow" doc:id="78a85fef-d8f6-4e2a-9c2b-f064d33f46ec" >
+		<http:listener doc:name="Listener" doc:id="2d527f70-a52c-47cf-bbe6-1e9aacd8ff9d" config-ref="HTTP_Listener_config" path="/email"/>
+		<email:send doc:name="Send" doc:id="8ffb8bb1-34ba-4595-87db-3191d4afdbde" config-ref="Email_SMTP" fromAddress="sunil732@gmail.com" subject="Test mule email ">
+			<email:to-addresses >
+				<email:to-address value="reenaekansh@gmail.com" />
+			</email:to-addresses>
+			<email:body contentType="text/plain" encoding="UTF-8" >
+				<email:content ><![CDATA['this is the first email from the mule soft to test the content']]></email:content>
+			</email:body>
+		</email:send>
+	</flow>
+</mule>
